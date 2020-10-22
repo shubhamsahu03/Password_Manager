@@ -141,6 +141,7 @@ def mul(L, odd_L, even_L):
 
 #gAAAAABfgCGFf4-mJYi13Xl6WYzeLQl6spNUj_03tU5EhR0wgoi64KfRYb374WRiuh9NUw6_W_0Xy_5kUMB4jpwOOcXe_G_fng==
 a="gAAAAABfgCGndaZX8Sq2ma9j1cMVRIt1r76B7XB6RQtUOL5jZNkVFhMoeiCletCd3RgF5nJiGF0i_YRKMDPu3HiVp9o7q9Vhdg=="
+#main
 import os,pbkdf2,binascii,secrets,pyaes,pymysql
 salt=os.urandom(32)
 s=salt
@@ -162,7 +163,7 @@ print('Decrypted:', decrypted.decode())
 key = os.urandom(32)   # random decryption key
 aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(iv))
 print('Wrongly decrypted:', aes.decrypt(ciphertext))
-print((len(binascii.hexlify(ciphertext).decode())))
+
 #functions for encryption/decryption
 """def keygenerate(password,salt):
     key=

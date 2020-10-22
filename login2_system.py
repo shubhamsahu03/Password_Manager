@@ -197,7 +197,7 @@ class Login_system:
             return
     def register_window(self):
         self.root.destroy()
-        import login_system
+
     def login(self):
         if self.txt_password.get()=="" or  self.txt_username.get()=="" :
              messagebox.showerror("Error","All fields are required",parent=self.root)

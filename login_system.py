@@ -276,7 +276,7 @@ class Signup_system:
     ('VU', 'Vanuatu'),
     ('VA', 'Vatican City State'),
     ('VE', 'Venezuela'),
-    ('VN', 'Viet Nam'),
+    ('VN', 'VietNam'),
     ('VG', 'Virgin Islands (British)'),
     ('VI', 'Virgin Islands (U.S.)'),
     ('EH', 'Western Sahara'),

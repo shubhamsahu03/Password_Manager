@@ -107,12 +107,21 @@ class Login_system:
                     messagebox.showinfo("Success", "your password has been reset,Please login with new password.",
                                         parent=self.root2)
 
-                    self.root2.destroy()
+
                     self.clear()
             except Exception as es:
 
                 messagebox.showerror("Error", f"Error Due to: {str(es)}", parent=self.root2)
 
+    def iExit_2(self):
+
+            self.iExit_2 = messagebox.askyesno("Change Password systems", "Confirm if you want to exit.", parent=self.root2)
+            if self.iExit_2 > 0:
+                self.root2.destroy()
+
+            else:
+                command = self.root2
+                return
 
     def forget_password(self):
         if self.txt_username.get()=="":
@@ -166,12 +175,14 @@ class Login_system:
                     self.new_txt_password = Entry(t_Frame, font=("times new roman", 15), bg="lightgray", show="*")
                     self.new_txt_password.place(x=120, y=160, width=170)
                     #==========================
-                    btn_change_password = Button(t_Frame, text="Reset password", bg="green", fg="white",
-                                                 font=("times new roman", 15, "bold"),command=self.forget_pass).place(x=50, y=300)
+                    btn_change_password = Button(t_Frame, text="Reset password", bg="green", fg="white",relief=SUNKEN,
+                                                 font=("times new roman", 15, "bold"),command=self.forget_pass).place(x=30, y=300)
                     btn_reset=Button(t_Frame, text="Reset", bg="green", fg="white",
-                                                 font=("times new roman", 15, "bold"),command=self.clear2).place(x=200, y=300)
+                                                 font=("times new roman", 15, "bold"),command=self.clear2,relief=SUNKEN).place(x=180, y=300)
                     btn_toggle_2 = Checkbutton(t_Frame, text="Show", bg="white", fg="blue",
                                              font=("times new roman", 12), borderwidth=0, command=self.show_psd_hide_2,variable=self.check_var_2, onvalue=1, offvalue=0).place(x=295, y=160)
+                    btn_exit_2=Button(t_Frame, text="Exit", bg="green", fg="white",
+                                                 font=("times new roman", 15, "bold"),command=self.iExit_2,relief=SUNKEN).place(x=247, y=300)
                     self.clear()
             except Exception as es:
                 messagebox.showerror("Error", f"Error Due to: {str(es)}", parent=self.root)

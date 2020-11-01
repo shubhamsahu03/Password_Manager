@@ -45,6 +45,7 @@ class Signup_system:
           pass_input=Label(frame1,text="Password",font=("times new roman",15,"bold"),bg="white",fg="gray").place(x=20,y=160)
           self.txt_password = Entry(frame1, font=("times new roman", 15), bg="lightgray",show="*")
           self.txt_password.place(x=120, y=160, width=250)
+          self.tab_order()
 
           #confirm password
           pass_confirm=Label(frame1,text="Confirm ",font=("times new roman",15,"bold"),bg="white",fg="gray").place(x=20,y=210)
@@ -307,7 +308,11 @@ class Signup_system:
           my_button_2=Button(frame1,image=self.signin_btn,borderwidth=0,bg="white",command=self.sign_in)
           my_button_2.place(x=180, y=338)
 
-
+      def tab_order(self):
+          self.txt_username.focus()
+          widget = [self.txt_username, self.txt_password]
+          for i in widget:
+              i.lift()
       def sign_in(self):
           self.a=Toplevel(self.root)
           from login2_system import Login_system

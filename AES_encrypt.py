@@ -145,17 +145,19 @@ a="gAAAAABfgCGndaZX8Sq2ma9j1cMVRIt1r76B7XB6RQtUOL5jZNkVFhMoeiCletCd3RgF5nJiGF0i_
 import os,pbkdf2,binascii,secrets,pyaes,pymysql
 salt=os.urandom(32)
 s=salt
-password = "s3cr3t*c0d3"
+password = "shubham"
 
 key = pbkdf2.PBKDF2(password, s,1500).read(32)
 print('AES encryption key:', (binascii.hexlify(key).decode()))
-iv = secrets.randbits(256)
+iv=secrets.randbits(256)
 plaintext =input("enter text to be encrytped:")
 #encrytion
 aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(iv))
 ciphertext = aes.encrypt(plaintext)
+print(ciphertext)
 print('Encrypted:', binascii.hexlify(ciphertext).decode())
 #decryption
+
 aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(iv))
 decrypted = aes.decrypt(ciphertext)
 print('Decrypted:', decrypted.decode())

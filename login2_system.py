@@ -6,6 +6,7 @@ from tkinter import ttk,messagebox
 import pymysql
 from sha256 import *
 from hashlib import *
+from new import test
 
 
 
@@ -21,6 +22,7 @@ class Login_system:
         self.root.geometry("1350x700+0+0")
         self.root.focus_force()
         self.root.grab_set()
+
         #======BG IMAGE=======
         self.bg_pic = ImageTk.Image.open("C:\images_for_project/background3_img.jpg")
         self.resized = self.bg_pic.resize((1350, 700), ImageTk.Image.ANTIALIAS)
@@ -44,6 +46,7 @@ class Login_system:
             x=20, y=145)
         self.txt_username=Entry(Frame_Login,font=("times new roman",17),bg="lightgray")
         self.txt_username.place(x=140,y=145,width=250)
+
         #=====password=====
         self.check_var=IntVar()
         password = Label(Frame_Login, text="Password", font=("times new roman", 19, "bold"), bg="white",
@@ -51,6 +54,7 @@ class Login_system:
             x=20, y=195)
         self.txt_password = Entry(Frame_Login, font=("times new roman", 17), bg="lightgray")
         self.txt_password.place(x=140, y=195, width=250)
+        self.tab_order()
         #========Buttons================
         Change_btn=Button(Frame_Login,text="Change Password?",bg="white",fg="red",font=("times new roman",12),borderwidth=0,command=self.forget_password).place(x=275,y=236)
         login_btn=Button(Frame_Login,text="Login",fg="white",borderwidth=1,bg="green",font=("times new roman", 17),command=self.login,cursor="hand2").place(x=30,y=350,width=100)
@@ -65,7 +69,11 @@ class Login_system:
 
 
 
-
+    def tab_order(self):
+        self.txt_username.focus()
+        widget=[self.txt_username,self.txt_password]
+        for i in widget:
+            i.lift()
     def show_psd_hide(self):
         if (self.check_var.get()):
 
@@ -227,9 +235,11 @@ class Login_system:
                     data=cur_2.fetchone()
                     s=data[1]
                     salt_encoded=s.encode("utf-8")
+
                     a=sha256_algo(self.txt_password.get(),salt_encoded)
                     if a==data[0]:
                         messagebox.showinfo("congrats","Successfully logged in!",parent=self.root)
+                        b = test(self.txt_password.get())
                         self.clear()
                     else:
 

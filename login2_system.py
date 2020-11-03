@@ -6,7 +6,7 @@ from tkinter import ttk,messagebox
 import pymysql
 from sha256 import *
 from hashlib import *
-from new import test
+
 
 
 
@@ -239,7 +239,7 @@ class Login_system:
                     a=sha256_algo(self.txt_password.get(),salt_encoded)
                     if a==data[0]:
                         messagebox.showinfo("congrats","Successfully logged in!",parent=self.root)
-                        b = test(self.txt_password.get())
+
                         self.clear()
                     else:
 

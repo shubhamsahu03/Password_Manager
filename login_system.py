@@ -23,7 +23,9 @@ class Signup_system:
 
           self.left_new=ImageTk.PhotoImage( ImageTk.Image.open("C:\images_for_project/side1.png"))
           left=Label(self.root,image=self.left_new).place(x=80,y=100,width=400,height=500)
-
+          #========Security measures===
+          self.iv=initialization_vector()
+          self.key_salt=key_salt()
 
           #====Frame=====
 
@@ -364,10 +366,10 @@ class Signup_system:
 
 
 
-                      cur.execute("insert into user (Username,Password,Country_of_origin,salt) values(%s,%s,%s,%s)",
+                      cur.execute("insert into user (Username,Password,Country_of_origin,salt,iv,key_salt) values(%s,%s,%s,%s,%s,%s)",
                                   (self.txt_username.get(),
                                    sha256_algo(self.txt_password.get(),salt),
-                                   self.c_origin.get(),salt_decoded))
+                                   self.c_origin.get(),salt_decoded,str(self.iv),self.key_salt.decode("latin1")))
                       con.commit()
                       con.close()
 

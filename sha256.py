@@ -18,7 +18,23 @@ def sha256_algo(s,a):
     m=hb.sha256()
     m.update(s.encode("utf-8")+a)
     return m.hexdigest()
+import os,pbkdf2,binascii,secrets,pyaes,pymysql
+def initialization_vector():
+    iv =secrets.randbits(256)
+    return iv
+def key_salt():
+    salt = os.urandom(32)
+    return salt
+"""def check(a):
+    n=len(a)
+    return n
+print(check(str(initialization_vector())))"""
+"""def encrypt(plaintext):
 
+    aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(iv))
+    ciphertext = aes.encrypt(plaintext)
+    print('Encrypted:', binascii.hexlify(ciphertext).decode())
+"""
 """
 con=pymysql.connect(host="localhost",user="root",password='',database="password_database")
 cur=con.cursor()

@@ -203,7 +203,7 @@ class Login_system:
         txt_notes = Entry(Manager_Frame,textvariable=self.Notes_var, font=("times new roman", 20, "bold"), bd=5, relief=GROOVE).place(x=140,y=280,height=100)
 
         Addbtn=Button(Manager_Frame,text="Add",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=10,y=500,width=100)
-        Updatetn=Button(Manager_Frame,text="Create",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=110,y=500,width=100)
+        Updatetn=Button(Manager_Frame,text="Update",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=110,y=500,width=100)
         Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=210,y=500,width=100)
         Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=310,y=500,width=100)
 

@@ -56,7 +56,7 @@ class Login_system:
         self.txt_password.place(x=140, y=195, width=250)
         self.tab_order()
         #========Buttons================
-        Change_btn=Button(Frame_Login,text="Change Password?",bg="white",fg="red",font=("times new roman",12),borderwidth=0,command=self.forget_password).place(x=275,y=236)
+
         login_btn=Button(Frame_Login,text="Login",fg="white",borderwidth=1,bg="green",font=("times new roman", 17),command=self.login,cursor="hand2").place(x=30,y=350,width=100)
 
         reset_btn = Button(Frame_Login, text="Reset",bd=1, fg="white", bg="green", font=("times new roman", 17),
@@ -145,6 +145,7 @@ class Login_system:
                         messagebox.showinfo("congrats","Successfully logged in!",parent=self.root)
                         self.iv_and_salt=take_iv_salt(self.txt_username.get())
                         self.clear()
+                        self.password_manager_window()
 
 
 
@@ -160,6 +161,95 @@ class Login_system:
                 con.close()
             except Exception as es:
                     messagebox.showerror("Error",f"Error Due to: {str(es)}",parent=self.root)
+    def password_manager_window(self):
+        self.root2=Toplevel(self.root)
+        self.root2.title("Password manager Window")
+        self.root2.geometry("400x400+450+150")
+        self.root2.focus_force()
+        self.root2.grab_set()
+
+
+
+        #========background============
+        self.root2.configure(bg="gray7")
+        #=======Title==========
+        title=Label(self.root2,text="Password Manager",bd=10,relief=GROOVE,font=("times new roman",40,"bold"),bg="white",fg="black")
+        title.pack(side=TOP,fill=X)
+        # =====All varibles=====
+        self.Title_var = StringVar()
+        self.Username_var = StringVar()
+        self.URL_var = StringVar()
+        self.Password_var = StringVar()
+        self.Notes_var = StringVar()
+        #=====Manager_Frame======
+        Manager_Frame=Frame(self.root2,bd=4,relief=RIDGE,bg="white")
+        Manager_Frame.place(x=20,y=100,width=450,height=560)
+        #====Detail_Frame
+        Detail_Frame = Frame(self.root2, bd=4, relief=RIDGE, bg="white")
+        Detail_Frame.place(x=500, y=100, width=765, height=70)
+
+        #====content of manager frame===
+
+        m_title=Label(Manager_Frame,text="Manage Passwords",bg="white",fg="black",font=("times new roman",20,"bold")).place(x=100,y=10)
+        lbl_title=Label(Manager_Frame,text="Title",bg="white",fg="black",font=("times new roman",20,"bold")).place(x=10,y=80)
+        txt_title=Entry(Manager_Frame,textvariable=self.Title_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=80)
+        lbl_username = Label(Manager_Frame, text="Username", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=130)
+        txt_username=Entry(Manager_Frame,textvariable=self.Username_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140, y=130)
+        lbl_URL=Label(Manager_Frame, text="URL", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10, y=180)
+        txt_URL=Entry(Manager_Frame,textvariable=self.URL_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=180)
+        lbl_password=Label(Manager_Frame, text="Password", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=230)
+        txt_password=Entry(Manager_Frame,textvariable=self.Password_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=230)
+        lbl_notes=Label(Manager_Frame, text="Notes", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=280)
+        txt_notes = Entry(Manager_Frame,textvariable=self.Notes_var, font=("times new roman", 20, "bold"), bd=5, relief=GROOVE).place(x=140,y=280,height=100)
+
+        Addbtn=Button(Manager_Frame,text="Add",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=10,y=500,width=100)
+        Updatetn=Button(Manager_Frame,text="Create",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=110,y=500,width=100)
+        Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=210,y=500,width=100)
+        Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=310,y=500,width=100)
+
+    #=====content of detail frame=====
+        lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)
+        combo_search=ttk.Combobox(Detail_Frame,font=("times new roman",13,"bold"),state="readonly")
+        combo_search["values"]=("","Title","Username","URL")
+        combo_search.place(x=145,y=15)
+
+
+        txt_Search=Entry(Detail_Frame,width=1,font=("times new roman",17,"bold"),bd=5,relief=GROOVE).place(x=360,y=15,width=170,height=40)
+        searchbtn=Button(Detail_Frame,text="Search",width=10,pady=5,bg="gold3",font=("times new roman",10,"bold")).place(x=545,y=15)
+        show_allbtn = Button(Detail_Frame, text="Show All", width=10, pady=5, bg="OrangeRed3",
+                           font=("times new roman", 10, "bold")).place(x=640, y=15)
+    #=======Table Frame====
+        Table_Frame = Frame(self.root2, bd=4, relief=RIDGE, bg="white")
+        Table_Frame.place(x=500, y=190, width=765, height=470)
+
+
+
+
+        scroll_x=ttk.Scrollbar(Table_Frame,orient=HORIZONTAL)
+        scroll_y = ttk.Scrollbar(Table_Frame, orient=VERTICAL)
+        self.Password_Table=ttk.Treeview(Table_Frame,columns=("Title","Username","URL","Password","Notes"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+
+
+        
+        scroll_x.pack(side=BOTTOM,fill=X)
+        scroll_y.pack(side=RIGHT,fill=Y)
+        scroll_x.config(command=self.Password_Table.xview)
+        scroll_y.config(command=self.Password_Table.yview)
+        self.Password_Table.heading("Title",text="Title")
+        self.Password_Table.heading("Username", text="Username")
+        self.Password_Table.heading("URL", text="URL")
+        self.Password_Table.heading("Password", text="Password")
+        self.Password_Table.heading("Notes", text="Notes")
+        self.Password_Table["show"]="headings"
+        self.Password_Table.column("Title",width=200)
+        self.Password_Table.column("Username", width=200)
+        self.Password_Table.column("URL", width=200)
+        self.Password_Table.column("Password", width=200)
+        self.Password_Table.column("Notes", width=200)
+        self.Password_Table.pack(fill=BOTH,expand=1)
+    #======Add entries=======
+
+
 
 if __name__=="__main__":
     main()

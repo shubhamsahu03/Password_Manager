@@ -12,7 +12,7 @@ class Signup_system:
           self.root=root
           self.root.title("Signup system")
           self.root.geometry("1350x700+0+0")
-          self.bg_pic=ImageTk.Image.open("C:\images_for_project/background2_img.jpg")
+          self.bg_pic=ImageTk.Image.open("pictures_1/background2_img.jpg")
           self.resized=self.bg_pic.resize((1350,700),ImageTk.Image.ANTIALIAS)
           self.new_bgpic=ImageTk.PhotoImage(self.resized)
 
@@ -21,7 +21,7 @@ class Signup_system:
 
           #====left image====
 
-          self.left_new=ImageTk.PhotoImage( ImageTk.Image.open("C:\images_for_project/side1.png"))
+          self.left_new=ImageTk.PhotoImage( ImageTk.Image.open("pictures_1/side1.png"))
           left=Label(self.root,image=self.left_new).place(x=80,y=100,width=400,height=500)
           #========Security measures===
           self.iv=initialization_vector()
@@ -35,7 +35,7 @@ class Signup_system:
           tilte=Label(frame1,text="REGISTER HERE",font=("times new roman",20,"bold"),bg="white",fg="green").place(x=20,y=40)
 
           #===profile pic===
-          self.web_user = ImageTk.PhotoImage(ImageTk.Image.open("C:\images_for_project/web_user.jpg").resize((100,100),ImageTk.Image.ANTIALIAS))
+          self.web_user = ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/web_user.jpg").resize((100,100),ImageTk.Image.ANTIALIAS))
 
           dp = Label(frame1, image=self.web_user,bg="white").place(x=550,y=20)
 
@@ -292,7 +292,7 @@ class Signup_system:
           self.c_origin.place(x=175, y=280)
           self.c_origin.current(0)
           #===Signup=====
-          self.signup_btn= ImageTk.PhotoImage(ImageTk.Image.open("C:\images_for_project/signup.png").resize((100,70),ImageTk.Image.ANTIALIAS))
+          self.signup_btn= ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/signup.png").resize((100,70),ImageTk.Image.ANTIALIAS))
           my_button=Button(frame1,image=self.signup_btn,borderwidth=0,bg="white",command=self.signup)
           my_button.place(x=60,y=350)
 

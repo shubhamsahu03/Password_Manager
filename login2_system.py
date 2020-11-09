@@ -24,7 +24,7 @@ class Login_system:
         self.root.grab_set()
 
         #======BG IMAGE=======
-        self.bg_pic = ImageTk.Image.open("C:\images_for_project/background3_img.jpg")
+        self.bg_pic = ImageTk.Image.open("pictures_1/background3_img.jpg")
         self.resized = self.bg_pic.resize((1350, 700), ImageTk.Image.ANTIALIAS)
         self.new_bgpic = ImageTk.PhotoImage(self.resized)
 
@@ -38,7 +38,7 @@ class Login_system:
         desc=Label(Frame_Login,text="Password Database Login System",font=("times new roman",15,"bold"),bg="white",fg="black").place(x=135,y=100)
         #======profile pic======
         self.web_user = ImageTk.PhotoImage(
-        ImageTk.Image.open("C:\images_for_project/web_user.jpg").resize((100, 100), ImageTk.Image.ANTIALIAS))
+        ImageTk.Image.open("pictures_1/web_user.jpg").resize((100, 100), ImageTk.Image.ANTIALIAS))
 
         dp = Label(Frame_Login, image=self.web_user, bg="white").place(x=475, y=20)
         #=====username====

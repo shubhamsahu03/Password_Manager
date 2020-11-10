@@ -295,6 +295,8 @@ class Signup_system:
           self.signup_btn= ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/signup.png").resize((100,70),ImageTk.Image.ANTIALIAS))
           my_button=Button(frame1,image=self.signup_btn,borderwidth=0,bg="white",command=self.signup)
           my_button.place(x=60,y=350)
+          #=====Exit Button======
+          exit_button=Button(frame1,)
 
           #======toggle====
           self.check_var=IntVar()
@@ -355,6 +357,8 @@ class Signup_system:
               try:
                   con=pymysql.connect(host="localhost",user="root",password='',database="password_database" )
                   cur=con.cursor()
+                  con_2=pymysql.connect(host="localhost",user="root",password='',database="password_database" )
+                  cur_2=con_2.cursor()
                   cur.execute("select * from user where Username=%s",self.txt_username.get())
                   row=cur.fetchone()
 
@@ -372,8 +376,11 @@ class Signup_system:
                                    self.c_origin.get(),salt_decoded,str(self.iv),self.key_salt.decode("latin1")))
 
                       con.commit()
+                      cur_2.execute(
+                          "create table {} (Title varchar(50),Username varchar(60),URL varchar(50),Password varchar(60),Notes varchar(50))".format(
+                              "user_" + str(id_required(self.txt_username.get()))))
                       con.close()
-
+                      con_2.close()
                       messagebox.showinfo("Congrats","Successfully signed up!")
 
                       self.clear()

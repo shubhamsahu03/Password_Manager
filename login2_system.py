@@ -6,7 +6,7 @@ from tkinter import ttk,messagebox
 import pymysql
 from sha256 import *
 from hashlib import *
-
+import binascii
 
 
 
@@ -143,8 +143,10 @@ class Login_system:
                     a=sha256_algo(self.txt_password.get(),salt_encoded)
                     if a==data[0]:
                         messagebox.showinfo("congrats","Successfully logged in!",parent=self.root)
-                        self.iv_and_salt=take_iv_salt(self.txt_username.get())
+                        self.iv_and_salt=take_iv_id_salt(self.txt_username.get())
                         self.clear()
+                        self.security_key=security_key(self.txt_password.get(),self.iv_and_salt[1].encode("latin1"))
+
                         self.password_manager_window()
 
 
@@ -192,20 +194,20 @@ class Login_system:
 
         m_title=Label(Manager_Frame,text="Manage Passwords",bg="white",fg="black",font=("times new roman",20,"bold")).place(x=100,y=10)
         lbl_title=Label(Manager_Frame,text="Title",bg="white",fg="black",font=("times new roman",20,"bold")).place(x=10,y=80)
-        txt_title=Entry(Manager_Frame,textvariable=self.Title_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=80)
+        self.txt_title=Entry(Manager_Frame,textvariable=self.Title_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=80)
         lbl_username = Label(Manager_Frame, text="Username", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=130)
-        txt_username=Entry(Manager_Frame,textvariable=self.Username_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140, y=130)
+        self.txt_username_entry=Entry(Manager_Frame,textvariable=self.Username_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140, y=130)
         lbl_URL=Label(Manager_Frame, text="URL", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10, y=180)
-        txt_URL=Entry(Manager_Frame,textvariable=self.URL_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=180)
+        self.txt_URL=Entry(Manager_Frame,textvariable=self.URL_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=180)
         lbl_password=Label(Manager_Frame, text="Password", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=230)
-        txt_password=Entry(Manager_Frame,textvariable=self.Password_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=230)
+        self.txt_password_entry=Entry(Manager_Frame,textvariable=self.Password_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=230)
         lbl_notes=Label(Manager_Frame, text="Notes", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=280)
-        txt_notes = Entry(Manager_Frame,textvariable=self.Notes_var, font=("times new roman", 20, "bold"), bd=5, relief=GROOVE).place(x=140,y=280,height=100)
+        self.txt_notes = Entry(Manager_Frame,textvariable=self.Notes_var, font=("times new roman", 20, "bold"), bd=5, relief=GROOVE).place(x=140,y=280,height=100)
 
-        Addbtn=Button(Manager_Frame,text="Add",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=10,y=500,width=100)
+        Addbtn=Button(Manager_Frame,text="Add",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.add_data).place(x=10,y=500,width=100)
         Updatetn=Button(Manager_Frame,text="Update",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=110,y=500,width=100)
         Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=210,y=500,width=100)
-        Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=310,y=500,width=100)
+        Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.Clear).place(x=310,y=500,width=100)
 
     #=====content of detail frame=====
         lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)
@@ -247,7 +249,46 @@ class Login_system:
         self.Password_Table.column("Password", width=200)
         self.Password_Table.column("Notes", width=200)
         self.Password_Table.pack(fill=BOTH,expand=1)
+        self.fetch_data()
     #======Add entries=======
+    def add_data(self):
+
+
+        db=pymysql.connect("localhost","root",'',"password_database")
+        cur=db.cursor()
+        cur.execute("insert into user_{} (Title,Username,URL,Password,Notes) values(%s,%s,%s,%s,%s)".format(str(self.iv_and_salt[2])),(self.Title_var.get(),self.Username_var.get(),
+                     self.URL_var.get(),
+                     encrypt(self.Password_var.get(),
+                             self.security_key,int(self.iv_and_salt[0])),
+                     self.Notes_var.get()))
+        db.commit()
+        self.fetch_data()
+        self.Clear()
+        db.close()
+    #======fetch data====
+    def fetch_data(self):
+        db = pymysql.connect("localhost", "root", '', "password_database")
+        cur = db.cursor()
+        cur.execute("select * from user_{}".format(str(self.iv_and_salt[2])))
+        rows=cur.fetchall()
+        if len(rows)!=0:
+            self.Password_Table.delete(*self.Password_Table.get_children())
+            for row in rows:
+                self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4]))
+            db.commit()
+        db.close()
+    #======Clear_entries=====
+    def Clear(self):
+        self.Title_var.set("")
+        self.Username_var.set("")
+        self.URL_var.set("")
+        self.Password_var.set("")
+        self.Notes_var.set("")
+"""    def get_cursor(self):
+        cursor_row=self.Password_Table.focus()
+        content=self
+"""
+
 
 
 

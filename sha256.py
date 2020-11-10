@@ -25,10 +25,10 @@ def initialization_vector():
 def key_salt():
     salt = os.urandom(32)
     return salt
-def take_iv_salt(username):
+def take_iv_id_salt(username):
     db=pymysql.connect("localhost","root",'',"password_database")
     cur=db.cursor()
-    cur.execute("select iv,key_salt from user where Username=%s",(username))
+    cur.execute("select iv,key_salt,id from user where Username=%s",(username))
     db.close()
     return cur.fetchone()
 def security_key(password,salt):
@@ -42,5 +42,16 @@ def decrypt(ciphertext,key,iv):
     aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(iv))
     decrypted = aes.decrypt(ciphertext)
     return decrypted.decode()
+def id_required(username):
+    db = pymysql.connect("localhost", "root", '', "password_database")
+    cur = db.cursor()
+    cur.execute("select id from user where Username=%s", (username))
+    data=cur.fetchone()
+    db.close()
+    return data[0]
+
+def bring_user_table(username):
+
+    return ("user_"+id_required(username))
 
 

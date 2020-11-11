@@ -7,6 +7,7 @@ import pymysql
 from sha256 import *
 from hashlib import *
 import binascii
+import string
 
 
 
@@ -82,25 +83,18 @@ class Login_system:
 
             self.txt_password.config(show="")
 
-
-    def show_psd_hide_2(self):
-        if (self.check_var_2.get()):
-
-            self.new_txt_password.config(show="")
-        else:
-
-            self.new_txt_password.config(show="*")
-
-
     def iExit_2(self):
 
-            self.iExit_2 = messagebox.askyesno("Change Password systems", "Confirm if you want to exit.", parent=self.root2)
-            if self.iExit_2 > 0:
-                self.root2.destroy()
+        self.iExit_2 = messagebox.askyesno("Password Manager Window", "Confirm if you want to Logout.", parent=self.root2)
+        if self.iExit_2 > 0:
+            self.root2.destroy()
 
-            else:
-                command = self.root2
-                return
+        else:
+            command = self.root2
+            return
+
+
+
 
 
 
@@ -186,6 +180,7 @@ class Login_system:
         self.U_ID_var=StringVar()
         self.search_by=StringVar()
         self.search_txt=StringVar()
+        self.check_Password_var=IntVar()
 
         #=====Manager_Frame======
         Manager_Frame=Frame(self.root2,bd=4,relief=RIDGE,bg="white")
@@ -214,7 +209,8 @@ class Login_system:
         Updatetn=Button(Manager_Frame,text="Update",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.update_data).place(x=110,y=500,width=100)
         Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.delete_data).place(x=210,y=500,width=100)
         Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.Clear).place(x=310,y=500,width=100)
-
+        Generate_random_password=Button(Manager_Frame,text="Generate Password",fg="black",bg="dodger blue",borderwidth=1,font=("times new roman",15,"bold"),command=self.generate_random_password).place(x=140,y=390)
+        Exit_btn=Button(Manager_Frame,text="Logout?",fg="white",bg="red",borderwidth=1,font=("times new roman",17,"bold"),command=self.iExit_2).place(x=330,y=390)
     #=====content of detail frame=====
         lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)
         combo_search=ttk.Combobox(Detail_Frame,font=("times new roman",13,"bold"),state="readonly",textvariable=self.search_by)
@@ -349,6 +345,14 @@ class Login_system:
             messagebox.showerror("Error","Incorrect Information!",parent=self.root2)
         db.close()
         self.Clear()
+    def generate_random_password(self):
+        table = string.printable
+        password = ""
+        for i in range(randint(8, 10)):
+            x = randint(0, 94)
+            password += string.printable[x]
+        self.Password_var.set(password)
+
 
 
 

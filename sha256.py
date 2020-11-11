@@ -55,3 +55,16 @@ def bring_user_table(username):
     return ("user_"+id_required(username))
 
 
+def random_ID_generator():
+    table = string.printable
+    password = ""
+    for i in range(randint(10, 30)):
+        x = randint(0, 94)
+        password += string.printable[x]
+
+    return password
+
+
+
+
+

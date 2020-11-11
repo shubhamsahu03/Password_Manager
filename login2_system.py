@@ -183,6 +183,10 @@ class Login_system:
         self.URL_var = StringVar()
         self.Password_var = StringVar()
         self.Notes_var = StringVar()
+        self.U_ID_var=StringVar()
+        self.search_by=StringVar()
+        self.search_txt=StringVar()
+
         #=====Manager_Frame======
         Manager_Frame=Frame(self.root2,bd=4,relief=RIDGE,bg="white")
         Manager_Frame.place(x=20,y=100,width=450,height=560)
@@ -203,23 +207,25 @@ class Login_system:
         self.txt_password_entry=Entry(Manager_Frame,textvariable=self.Password_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE).place(x=140,y=230)
         lbl_notes=Label(Manager_Frame, text="Notes", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=280)
         self.txt_notes = Entry(Manager_Frame,textvariable=self.Notes_var, font=("times new roman", 20, "bold"), bd=5, relief=GROOVE).place(x=140,y=280,height=100)
+        self.txt_U_ID=Entry(Manager_Frame,textvariable=self.U_ID_var,font=("times new roman",20,"bold"),bd=5,relief=GROOVE,state="readonly",highlightbackground="red",highlightthickness=2).place(x=10,y=390,width=120)
+
 
         Addbtn=Button(Manager_Frame,text="Add",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.add_data).place(x=10,y=500,width=100)
-        Updatetn=Button(Manager_Frame,text="Update",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=110,y=500,width=100)
-        Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE).place(x=210,y=500,width=100)
+        Updatetn=Button(Manager_Frame,text="Update",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.update_data).place(x=110,y=500,width=100)
+        Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.delete_data).place(x=210,y=500,width=100)
         Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.Clear).place(x=310,y=500,width=100)
 
     #=====content of detail frame=====
         lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)
-        combo_search=ttk.Combobox(Detail_Frame,font=("times new roman",13,"bold"),state="readonly")
+        combo_search=ttk.Combobox(Detail_Frame,font=("times new roman",13,"bold"),state="readonly",textvariable=self.search_by)
         combo_search["values"]=("","Title","Username","URL")
         combo_search.place(x=145,y=15)
 
 
-        txt_Search=Entry(Detail_Frame,width=1,font=("times new roman",17,"bold"),bd=5,relief=GROOVE).place(x=360,y=15,width=170,height=40)
-        searchbtn=Button(Detail_Frame,text="Search",width=10,pady=5,bg="gold3",font=("times new roman",10,"bold")).place(x=545,y=15)
+        txt_Search=Entry(Detail_Frame,textvariable=self.search_txt,width=1,font=("times new roman",17,"bold"),bd=5,relief=GROOVE).place(x=360,y=15,width=170,height=40)
+        searchbtn=Button(Detail_Frame,text="Search",width=10,pady=5,bg="gold3",font=("times new roman",10,"bold"),command=self.search_option).place(x=545,y=15)
         show_allbtn = Button(Detail_Frame, text="Show All", width=10, pady=5, bg="OrangeRed3",
-                           font=("times new roman", 10, "bold")).place(x=640, y=15)
+                           font=("times new roman", 10, "bold"),command=self.fetch_data).place(x=640, y=15)
     #=======Table Frame====
         Table_Frame = Frame(self.root2, bd=4, relief=RIDGE, bg="white")
         Table_Frame.place(x=500, y=190, width=765, height=470)
@@ -229,7 +235,7 @@ class Login_system:
 
         scroll_x=ttk.Scrollbar(Table_Frame,orient=HORIZONTAL)
         scroll_y = ttk.Scrollbar(Table_Frame, orient=VERTICAL)
-        self.Password_Table=ttk.Treeview(Table_Frame,columns=("Title","Username","URL","Password","Notes"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        self.Password_Table=ttk.Treeview(Table_Frame,columns=("Title","Username","URL","Password","Notes","U_ID"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
 
 
         
@@ -242,29 +248,35 @@ class Login_system:
         self.Password_Table.heading("URL", text="URL")
         self.Password_Table.heading("Password", text="Password")
         self.Password_Table.heading("Notes", text="Notes")
+        self.Password_Table.heading("U_ID", text="U_ID")
+
         self.Password_Table["show"]="headings"
         self.Password_Table.column("Title",width=200)
         self.Password_Table.column("Username", width=200)
         self.Password_Table.column("URL", width=200)
         self.Password_Table.column("Password", width=200)
         self.Password_Table.column("Notes", width=200)
+        self.Password_Table.column("U_ID",width=200)
         self.Password_Table.pack(fill=BOTH,expand=1)
+        self.Password_Table.bind("<ButtonRelease-1>",self.get_cursor)
         self.fetch_data()
     #======Add entries=======
     def add_data(self):
+        if self.Title_var.get()=="" or self.Username_var.get()=="" or self.URL_var.get()=="" or self.Password_var.get()=="" or self.Notes_var.get()=="":
+            messagebox.showerror("Error","All entries are required to fulfill!" ,parent=self.root2)
+        else:
 
-
-        db=pymysql.connect("localhost","root",'',"password_database")
-        cur=db.cursor()
-        cur.execute("insert into user_{} (Title,Username,URL,Password,Notes) values(%s,%s,%s,%s,%s)".format(str(self.iv_and_salt[2])),(self.Title_var.get(),self.Username_var.get(),
+            db=pymysql.connect("localhost","root",'',"password_database")
+            cur=db.cursor()
+            cur.execute("insert into user_{} (Title,Username,URL,Password,Notes,U_ID) values(%s,%s,%s,%s,%s,%s)".format(str(self.iv_and_salt[2])),(self.Title_var.get(),self.Username_var.get(),
                      self.URL_var.get(),
                      encrypt(self.Password_var.get(),
                              self.security_key,int(self.iv_and_salt[0])),
-                     self.Notes_var.get()))
-        db.commit()
-        self.fetch_data()
-        self.Clear()
-        db.close()
+                     self.Notes_var.get(),random_ID_generator()))
+            db.commit()
+            self.fetch_data()
+            self.Clear()
+            db.close()
     #======fetch data====
     def fetch_data(self):
         db = pymysql.connect("localhost", "root", '', "password_database")
@@ -274,7 +286,7 @@ class Login_system:
         if len(rows)!=0:
             self.Password_Table.delete(*self.Password_Table.get_children())
             for row in rows:
-                self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4]))
+                self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4],row[5]))
             db.commit()
         db.close()
     #======Clear_entries=====
@@ -284,10 +296,61 @@ class Login_system:
         self.URL_var.set("")
         self.Password_var.set("")
         self.Notes_var.set("")
-"""    def get_cursor(self):
+        self.U_ID_var.set("")
+        self.search_txt.set("")
+        self.search_by.set("")
+    def get_cursor(self,ev):
         cursor_row=self.Password_Table.focus()
-        content=self
-"""
+        content=self.Password_Table.item(cursor_row)
+        row=content["values"]
+        self.Title_var.set(row[0])
+        self.Username_var.set(row[1])
+        self.URL_var.set(row[2])
+        self.Password_var.set(row[3])
+        self.Notes_var.set(row[4])
+        self.U_ID_var.set(row[5])
+    #=======update data from table=======
+
+    def update_data(self):
+        db = pymysql.connect("localhost", "root", '', "password_database")
+        cur = db.cursor()
+        cur.execute("update user_{} set Title=%s,Username=%s,URL=%s,Password=%s,Notes=%s where U_ID=%s".format(str(self.iv_and_salt[2])),
+                    (self.Title_var.get(),self.Username_var.get(),self.URL_var.get(),encrypt(self.Password_var.get(),
+                             self.security_key,int(self.iv_and_salt[0])),self.Notes_var.get(),self.U_ID_var.get()))
+
+        db.commit()
+        self.fetch_data()
+        self.Clear()
+        db.close()
+    #======delete entry from table======
+    def delete_data(self):
+        db = pymysql.connect("localhost", "root", '', "password_database")
+        cur = db.cursor()
+        cur.execute("delete from user_{} where U_ID=%s".format(str(self.iv_and_salt[2])),(self.U_ID_var.get()))
+        db.commit()
+        db.close()
+        self.fetch_data()
+        self.Clear()
+
+    def search_option(self):
+        db = pymysql.connect("localhost", "root", '', "password_database")
+        cur = db.cursor()
+        table_name="select * from user_"+str(self.iv_and_salt[2])
+        cur.execute(table_name+" where " + str(self.search_by.get()) +" Like '%"+str(self.search_txt.get())+"%'")
+        rows = cur.fetchall()
+        if len(rows) != 0:
+            self.Password_Table.delete(*self.Password_Table.get_children())
+            for row in rows:
+                self.Password_Table.insert("", END, values=(row[0], row[1], row[2],
+                                                            decrypt(binascii.unhexlify(row[3]), self.security_key,
+                                                                    int(self.iv_and_salt[0])), row[4], row[5]))
+            db.commit()
+        else:
+            messagebox.showerror("Error","Incorrect Information!",parent=self.root2)
+        db.close()
+        self.Clear()
+
+
 
 
 

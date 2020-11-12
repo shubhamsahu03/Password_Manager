@@ -8,6 +8,7 @@ from sha256 import *
 from hashlib import *
 import binascii
 import string
+import pyperclip
 
 
 
@@ -218,6 +219,7 @@ class Login_system:
         Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.Clear).place(x=310,y=500,width=100)
         Generate_random_password=Button(Manager_Frame,text="Generate Password",fg="black",bg="dodger blue",borderwidth=1,font=("times new roman",15,"bold"),command=self.generate_random_password).place(x=140,y=390)
         Exit_btn=Button(Manager_Frame,text="Logout?",fg="white",bg="red",borderwidth=1,font=("times new roman",17,"bold"),command=self.iExit_2).place(x=330,y=390)
+        Copy_btn = Button(Manager_Frame, text="Copy Password", fg="white", bg="tomato2", borderwidth=1,font=("times new roman", 17, "bold"), command=self.copy_password).place(x=140, y=345)
     #=====content of detail frame=====
         lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)
         combo_search=ttk.Combobox(Detail_Frame,font=("times new roman",13,"bold"),state="readonly",textvariable=self.search_by)
@@ -292,7 +294,6 @@ class Login_system:
         cur = db.cursor()
         cur.execute("select * from user_{}".format(str(self.iv_and_salt[2])))
         rows=cur.fetchall()
-        self.count=0
         if len(rows)!=0:
             self.Password_Table.delete(*self.Password_Table.get_children())
             for row in rows:
@@ -300,7 +301,12 @@ class Login_system:
                 self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4],row[5]))
             db.commit()
         db.close()
+    #=====Copy password====
+    def copy_password(self):
+        random_password=self.Password_var.get()
+        pyperclip.copy(random_password)
     #======Clear_entries=====
+
     def Clear(self):
         self.Title_var.set("")
         self.Username_var.set("")
@@ -368,7 +374,7 @@ class Login_system:
     def generate_random_password(self):
         table = string.printable
         password = ""
-        for i in range(randint(8, 10)):
+        for i in range(randint(9, 11)):
             x = randint(0, 94)
             password += string.printable[x]
         self.Password_var.set(password)

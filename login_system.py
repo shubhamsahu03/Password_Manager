@@ -54,6 +54,7 @@ class Signup_system:
           pass_confirm2 = Label(frame1, text="Password", font=("times new roman", 15, "bold"), bg="white",fg="gray").place(x=20, y=240)
           self.txt_conf_password=Entry(frame1, font=("times new roman", 15), bg="lightgray",show="*")
           self.txt_conf_password.place(x=120, y=220, width=250)
+
           #country of origin
           c_text_origin=Label(frame1,text="Country of origin",font=("times new roman",15,"bold"),bg="white",fg="gray").place(x=20,y=280)
           self.c_origin=ttk.Combobox(frame1,font=("times new roman",13,),state="readonly",justify=CENTER,text="Enter Your Country")
@@ -295,9 +296,11 @@ class Signup_system:
           self.signup_btn= ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/signup.png").resize((100,70),ImageTk.Image.ANTIALIAS))
           my_button=Button(frame1,image=self.signup_btn,borderwidth=0,bg="white",command=self.signup)
           my_button.place(x=60,y=350)
-          #=====Exit Button======
-          exit_button=Button(frame1,)
 
+          # ====ExitButton====
+          self.exit_btn=ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/2659488-exit-button.jpg").resize((100,70),ImageTk.Image.ANTIALIAS))
+          exit_Btn=Button(frame1,image=self.exit_btn,borderwidth=0,bg="white",command=self.exit_function)
+          exit_Btn.place(x=550,y=355)
           #======toggle====
           self.check_var=IntVar()
           self.check_var_2=IntVar()
@@ -311,6 +314,14 @@ class Signup_system:
           self.signin_btn=ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/signin_2.jpg").resize((120,105),ImageTk.Image.ANTIALIAS))
           my_button_2=Button(frame1,image=self.signin_btn,borderwidth=0,bg="white",command=self.sign_in)
           my_button_2.place(x=180, y=338)
+
+      def exit_function(self):
+          MsgBox = messagebox.askquestion('Exit Application', 'Are you sure you want to Exit the application',
+                                          icon='warning', parent=self.root)
+          if MsgBox == 'yes':
+              self.root.destroy()
+          else:
+              pass
 
       def tab_order(self):
           self.txt_username.focus()

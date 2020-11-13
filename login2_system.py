@@ -58,7 +58,7 @@ class Login_system:
         self.txt_password.place(x=140, y=195, width=250)
         self.tab_order()
         #========Buttons================
-
+        Change_btn=Button(Frame_Login,text="Delete Account?",bg="white",fg="red",font=("times new roman",12),borderwidth=0,command=self.delete_account_yesorno).place(x=275,y=236)
         login_btn=Button(Frame_Login,text="Login",fg="white",borderwidth=1,bg="green",font=("times new roman", 17),command=self.login,cursor="hand2").place(x=30,y=350,width=100)
 
         reset_btn = Button(Frame_Login, text="Reset",bd=1, fg="white", bg="green", font=("times new roman", 17),
@@ -67,9 +67,7 @@ class Login_system:
                           command=self.iExit).place(x=290, y=350)
         btn_reg=Button(Frame_Login,text="Register New Account?",bg="white",fg="blue",font=("times new roman",12),borderwidth=0,command=self.register_window).place(x=20,y=236)
         btn_toggle=Checkbutton(Frame_Login,justify=CENTER,text="Hide",bg="white",fg="blue",font=("times new roman",12),borderwidth=0,command=self.show_psd_hide,variable=self.check_var,onvalue=1,offvalue=0).place(x=400, y=195)
-
-
-
+    #====Delete Account=====
 
     def tab_order(self):
         self.txt_username.focus()
@@ -156,15 +154,43 @@ class Login_system:
                 con.close()
             except Exception as es:
                     messagebox.showerror("Error",f"Error Due to: {str(es)}",parent=self.root)
-
-    """def delete_account(self):
+    #====Delete account option====
+    def delete_account_yesorno(self):
+        MsgBox = messagebox.askquestion('Delete Account?', 'Are you sure, you want to Delete your Account?',
+                                        icon='warning', parent=self.root)
+        if MsgBox == 'yes':
+            self.delete_account()
+        else:
+            pass
+    # ====Delete Account=====
+    def delete_account(self):
         if self.txt_username.get()=="" or self.txt_password.get()=="":
             messagebox.showerror("Error","All fields are required",parent=self.root)
         else:
             try:
                 db=pymysql.connect("localhost","root",'',"password_database")
                 cur=db.cursor()
-                cur.execute()"""
+                cur.execute("select Password,salt,id from user where Username=%s",(self.txt_username.get()))
+                row=cur.fetchone()
+                if row==None:
+                    messagebox.showerror("Error","Invalid Username",parent=self.root)
+                else:
+
+
+
+                    a = sha256_algo(self.txt_password.get(), row[1].encode("utf-8"))
+                    if a == row[0]:
+                        cur.execute("DROP TABLE user_{}".format(str(row[2])))
+                        cur.execute("delete from user where Username=%s",(self.txt_username.get()))
+                        db.commit()
+                        messagebox.showinfo("Deleted!","Your account has been deleted!",parent=self.root)
+                    else:
+                        messagebox.showinfo("Error","Invalid password!",parent=self.root)
+                    self.clear()
+                db.close()
+            except Exception as es:
+                messagebox.showerror("Error", f"Error Due to: {str(es)}", parent=self.root)
+
     def password_manager_window(self):
         self.root2=Toplevel(self.root)
         self.root2.title("Password manager Window")

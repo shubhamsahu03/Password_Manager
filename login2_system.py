@@ -3,12 +3,10 @@ from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import ttk,messagebox
 
-import pymysql
+
 from sha256 import *
 from hashlib import *
-import binascii
-import string
-import pyperclip
+import binascii,pyperclip,string,pymysql
 
 
 
@@ -222,7 +220,6 @@ class Login_system:
         #====Detail_Frame
         Detail_Frame = Frame(self.root2, bd=4, relief=RIDGE, bg="white")
         Detail_Frame.place(x=500, y=100, width=765, height=70)
-
         #====content of manager frame===
 
         m_title=Label(Manager_Frame,text="Manage Passwords",bg="white",fg="black",font=("times new roman",20,"bold")).place(x=100,y=10)
@@ -246,7 +243,8 @@ class Login_system:
         Generate_random_password=Button(Manager_Frame,text="Generate Password",fg="black",bg="dodger blue",borderwidth=1,font=("times new roman",15,"bold"),command=self.generate_random_password).place(x=140,y=390)
         Exit_btn=Button(Manager_Frame,text="Logout?",fg="white",bg="red",borderwidth=1,font=("times new roman",17,"bold"),command=self.iExit_2).place(x=330,y=390)
         Copy_btn = Button(Manager_Frame, text="Copy Password", fg="white", bg="tomato2", borderwidth=1,font=("times new roman", 17, "bold"), command=self.copy_password).place(x=140, y=345)
-    #=====content of detail frame=====
+
+        #=====content of detail frame=====
         lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)
         combo_search=ttk.Combobox(Detail_Frame,font=("times new roman",13,"bold"),state="readonly",textvariable=self.search_by)
         combo_search["values"]=("","Title","Username","URL")
@@ -254,7 +252,10 @@ class Login_system:
 
 
         txt_Search=Entry(Detail_Frame,textvariable=self.search_txt,width=1,font=("times new roman",17,"bold"),bd=5,relief=GROOVE).place(x=360,y=15,width=170,height=40)
-        searchbtn=Button(Detail_Frame,text="Search",width=10,pady=5,bg="gold3",font=("times new roman",10,"bold"),command=self.search_option).place(x=545,y=15)
+
+        self.search_image = ImageTk.PhotoImage(ImageTk.Image.open("pictures_1/search_icon_2.jpg").resize((40, 40), ImageTk.Image.ANTIALIAS))
+        searchbtn=Button(Detail_Frame,image=self.search_image,borderwidth=1,relief=GROOVE,bg="white",command=self.search_option)
+        searchbtn.place(x=555,y=12)
         show_allbtn = Button(Detail_Frame, text="Show All", width=10, pady=5, bg="OrangeRed3",
                            font=("times new roman", 10, "bold"),command=self.fetch_data).place(x=640, y=15)
     #=======Table Frame====
@@ -293,6 +294,8 @@ class Login_system:
         self.Password_Table.column("Email_ID", width=200)
         self.Password_Table.column("U_ID",width=200)
         self.Password_Table.pack(fill=BOTH,expand=1)
+        self.Password_Table["displaycolumns"]=("Title","Username","URL","Password","Email_ID")
+
         self.Password_Table.bind("<ButtonRelease-1>",self.get_cursor)
         self.fetch_data()
 
@@ -325,6 +328,7 @@ class Login_system:
             for row in rows:
 
                 self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4],row[5]))
+                self.Password_Table.selection_toggle()
             db.commit()
         db.close()
     #=====Copy password====
@@ -400,7 +404,7 @@ class Login_system:
     def generate_random_password(self):
         table = string.printable
         password = ""
-        for i in range(randint(9, 11)):
+        for i in range(randint(13, 15)):
             x = randint(0, 94)
             password += string.printable[x]
         self.Password_var.set(password)

@@ -4,6 +4,7 @@ from tkinter import ttk,messagebox
 from hashlib import *
 from sha256 import *
 import pymysql
+from initialize_db import init_db
 
 
 
@@ -400,13 +401,8 @@ class Signup_system:
                   messagebox.showerror("Error", f"Error due to: {str(es)}",parent=self.root)
 
 
+init_db()
 root=Tk()
-
-
-
-
 
 obj=Signup_system(root)
 root.mainloop()
-
-

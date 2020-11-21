@@ -13,6 +13,8 @@ class Signup_system:
           self.root=root
           self.root.title("Signup system")
           self.root.geometry("1350x700+0+0")
+          a=ImageTk.PhotoImage(file="pictures_1\Logo_Password_manager.png")
+          self.root.iconphoto(False,a)
           self.bg_pic=ImageTk.Image.open("pictures_1/background2_img.jpg")
           self.resized=self.bg_pic.resize((1350,700),ImageTk.Image.ANTIALIAS)
           self.new_bgpic=ImageTk.PhotoImage(self.resized)

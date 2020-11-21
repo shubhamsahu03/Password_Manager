@@ -23,6 +23,7 @@ class Login_system:
         self.root.focus_force()
         self.root.grab_set()
 
+
         #======BG IMAGE=======
         self.bg_pic = ImageTk.Image.open("pictures_1/background3_img.jpg")
         self.resized = self.bg_pic.resize((1350, 700), ImageTk.Image.ANTIALIAS)
@@ -30,6 +31,9 @@ class Login_system:
 
         bg_lbl = Label(self.root, image=self.new_bgpic).pack()
         title = Label(self.root, text="Signup System")
+        a = ImageTk.PhotoImage(file="pictures_1\Logo_Password_manager.png")
+        self.root.iconphoto(False, a)
+
         #=======Login Frame======
         Frame_Login=Frame(self.root,bg="white")
         Frame_Login.place(x=280, y=100, width=600, height=400)
@@ -198,11 +202,15 @@ class Login_system:
 
 
 
+
         #========background============
         self.root2.configure(bg="gray7")
         #=======Title==========
         title=Label(self.root2,text="Password Manager",bd=10,relief=GROOVE,font=("times new roman",40,"bold"),bg="white",fg="black")
         title.pack(side=TOP,fill=X)
+        a = ImageTk.PhotoImage(file="pictures_1\Logo_Password_manager.png")
+        self.root2.iconphoto(False, a)
+
         # =====All varibles=====
         self.Title_var = StringVar()
         self.Username_var = StringVar()

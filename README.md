@@ -8,3 +8,12 @@ Todo:
 4. Your Account passwords will be encrypted in counter mode of aes encryption method.
 5. Your Account table (Database used is MYSQL) has columns: Title,Username,URL,Password,Email-ID.
 6. Search Your Passwords by entering the corresponding Title or Username or URL.
+
+Depenedencies:
+1.pymysql
+2.pbkdf2
+3.secrets
+4.pyaes
+5.pillow
+6.pyperclip
+

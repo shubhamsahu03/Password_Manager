@@ -377,6 +377,7 @@ class Login_system:
         self.fetch_data()
         self.Clear()
         db.close()
+
     #======delete entry from table======
     def delete_data(self):
         db = pymysql.connect("localhost", "root", '', "password_database")

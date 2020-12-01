@@ -399,6 +399,7 @@ class Signup_system:
                           "create table {} (Title varchar(50),Username varchar(60),URL varchar(50),Password varchar(60),Email_ID varchar(50),U_ID varchar(50) PRIMARY KEY)".format(
                               "user_" + str(id_required(self.txt_username.get()))))
                       con.close()
+                      con_2.commit()
                       con_2.close()
                       messagebox.showinfo("Congrats","Successfully signed up!")
 

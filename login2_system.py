@@ -367,25 +367,58 @@ class Login_system:
     #=======update data from table=======
 
     def update_data(self):
-        db = pymysql.connect("localhost", "root", '', "password_database")
-        cur = db.cursor()
-        cur.execute("update user_{} set Title=%s,Username=%s,URL=%s,Password=%s,Email_ID=%s where U_ID=%s".format(str(self.iv_and_salt[2])),
-                    (self.Title_var.get(),self.Username_var.get(),self.URL_var.get(),encrypt(self.Password_var.get(),
-                             self.security_key,int(self.iv_and_salt[0])),self.EmailID_var.get(),self.U_ID_var.get()))
+        if self.U_ID_var.get()=="":
+            messagebox.showerror("Error","Empty Entry Box",parent=self.root2)
+        else:
+            try:
 
-        db.commit()
+                db = pymysql.connect("localhost", "root", '', "password_database")
+                cur = db.cursor()
+
+                cur.execute("select * from user_{} where U_ID=%s".format(self.iv_and_salt[2]),(self.U_ID_var.get()))
+                row=cur.fetchone()
+                if row==None:
+                    messagebox.showerror("Error","This record is not present in your Database.",parent=self.root2)
+                else:
+                    cur.execute("update user_{} set Title=%s,Username=%s,URL=%s,Password=%s,Email_ID=%s where U_ID=%s".format(
+                        str(self.iv_and_salt[2])),(self.Title_var.get(), self.Username_var.get(), self.URL_var.get(),
+                         encrypt(self.Password_var.get(),self.security_key, int(self.iv_and_salt[0])), self.EmailID_var.get(),
+                         self.U_ID_var.get()))
+
+                    messagebox.showinfo("Congrats", "The entry has been deleted.", parent=self.root2)
+                    db.commit()
+                db.close()
+            except Exception as es:
+                messagebox.showerror("Error", f"Error due to: {str(es)}", parent=self.root2)
+
+
         self.fetch_data()
         self.Clear()
-        db.close()
+
 
     #======delete entry from table======
     def delete_data(self):
-        db = pymysql.connect("localhost", "root", '', "password_database")
-        cur = db.cursor()
-        cur.execute("delete from user_{} where U_ID=%s".format(str(self.iv_and_salt[2])),(self.U_ID_var.get()))
-        db.commit()
-        db.close()
-        messagebox.showinfo("Deletion","Selected record has been deleted",parent=self.root2)
+
+        if self.U_ID_var.get()=="":
+            messagebox.showerror("Error","Empty Entry Box",parent=self.root2)
+        else:
+            try:
+                db = pymysql.connect("localhost", "root", '', "password_database")
+                cur = db.cursor()
+
+                cur.execute("select * from user_{} where U_ID=%s".format(self.iv_and_salt[2]),(self.U_ID_var.get()))
+                row=cur.fetchone()
+                if row==None:
+                    messagebox.showerror("Error","This record is not present in your Database.",parent=self.root2)
+                else:
+                    cur.execute("delete from user_{} where U_ID=%s".format(str(self.iv_and_salt[2])),(self.U_ID_var.get()))
+                    messagebox.showinfo("Congrats","The entry has been deleted.",parent=self.root2)
+                    db.commit()
+                db.close()
+            except Exception as es:
+                messagebox.showerror("Error", f"Error due to: {str(es)}", parent=self.root2)
+
+
         self.fetch_data()
         self.Clear()
 

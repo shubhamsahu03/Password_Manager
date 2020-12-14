@@ -1,8 +1,11 @@
 import pymysql
-
+import os.path
 
 def init_db():
-    con = pymysql.connect(host="localhost", user="root", passwd='')
+    check_file=os.path.join(os.path.abspath(os.path.dirname(__file__)),"mysqlcredentials.txt")
+    f=open(check_file,"r")
+    output=[i.strip("\n") for i in f.readlines()]
+    con = pymysql.connect(host=output[0],port=int(output[1]), user=output[2], passwd=output[3])
     cursor = con.cursor()
 
     # create database
@@ -24,3 +27,4 @@ def init_db():
     """
     cursor.execute(query)
     con.commit()
+    con.close()

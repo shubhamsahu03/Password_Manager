@@ -17,6 +17,9 @@ def main():
     root.mainloop()
 class Login_system:
     def __init__(self,root):
+        self.check_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), "mysqlcredentials.txt")
+        f = open(self.check_file, "r")
+        self.output = [i.strip("\n") for i in f.readlines()]
         self.root=root
         self.root.title("Login system")
         self.root.geometry("1350x700+0+0")
@@ -119,7 +122,7 @@ class Login_system:
              messagebox.showerror("Error","All fields are required",parent=self.root)
         else:
             try:
-                con=pymysql.connect(host="localhost",user="root",password='',database="password_database")
+                con=pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
                 cur=con.cursor()
                 cur.execute("select * from user where Username=%s",(self.txt_username.get()))
                 row=cur.fetchone()
@@ -136,7 +139,7 @@ class Login_system:
                     a=sha256_algo(self.txt_password.get(),salt_encoded)
                     if a==data[0]:
                         messagebox.showinfo("congrats","Successfully logged in!",parent=self.root)
-                        self.iv_and_salt=take_iv_id_salt(self.txt_username.get())
+                        self.iv_and_salt=take_iv_id_salt(self.txt_username.get(),self.output)
                         self.clear()
                         self.security_key=security_key(self.txt_password.get(),self.iv_and_salt[1].encode("latin1"))
 
@@ -170,7 +173,7 @@ class Login_system:
             messagebox.showerror("Error","All fields are required",parent=self.root)
         else:
             try:
-                db=pymysql.connect("localhost","root",'',"password_database")
+                db=pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
                 cur=db.cursor()
                 cur.execute("select Password,salt,id from user where Username=%s",(self.txt_username.get()))
                 row=cur.fetchone()
@@ -196,7 +199,7 @@ class Login_system:
     def password_manager_window(self):
         self.root2=Toplevel(self.root)
         self.root2.title("Password manager Window")
-        self.root2.geometry("400x400+450+150")
+        self.root2.geometry("1350x680+0+0")
         self.root2.focus_force()
         self.root2.grab_set()
 
@@ -327,7 +330,7 @@ class Login_system:
     #======fetch data====
     def fetch_data(self):
 
-        db = pymysql.connect("localhost", "root", '', "password_database")
+        db = pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
         cur = db.cursor()
         cur.execute("select * from user_{}".format(str(self.iv_and_salt[2])))
         rows=cur.fetchall()
@@ -336,7 +339,7 @@ class Login_system:
             for row in rows:
 
                 self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4],row[5]))
-                self.Password_Table.selection_toggle()
+
             db.commit()
         db.close()
     #=====Copy password====
@@ -358,6 +361,7 @@ class Login_system:
         cursor_row=self.Password_Table.focus()
         content=self.Password_Table.item(cursor_row)
         row=content["values"]
+
         self.Title_var.set(row[0])
         self.Username_var.set(row[1])
         self.URL_var.set(row[2])
@@ -372,7 +376,7 @@ class Login_system:
         else:
             try:
 
-                db = pymysql.connect("localhost", "root", '', "password_database")
+                db = pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
                 cur = db.cursor()
 
                 cur.execute("select * from user_{} where U_ID=%s".format(self.iv_and_salt[2]),(self.U_ID_var.get()))
@@ -385,7 +389,7 @@ class Login_system:
                          encrypt(self.Password_var.get(),self.security_key, int(self.iv_and_salt[0])), self.EmailID_var.get(),
                          self.U_ID_var.get()))
 
-                    messagebox.showinfo("Congrats", "The entry has been deleted.", parent=self.root2)
+                    messagebox.showinfo("Congrats", "The entry has been updated.", parent=self.root2)
                     db.commit()
                 db.close()
             except Exception as es:
@@ -403,7 +407,7 @@ class Login_system:
             messagebox.showerror("Error","Empty Entry Box",parent=self.root2)
         else:
             try:
-                db = pymysql.connect("localhost", "root", '', "password_database")
+                db = pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
                 cur = db.cursor()
 
                 cur.execute("select * from user_{} where U_ID=%s".format(self.iv_and_salt[2]),(self.U_ID_var.get()))
@@ -423,7 +427,7 @@ class Login_system:
         self.Clear()
 
     def search_option(self):
-        db = pymysql.connect("localhost", "root", '', "password_database")
+        db = pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
         cur = db.cursor()
         if str(self.search_by.get())=="":
             messagebox.showerror("Error","Empty parameter given ,Please choose another paramter!",parent=self.root2)

@@ -1,10 +1,11 @@
 from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import ttk,messagebox
-from hashlib import *
+
 from sha256 import *
 import pymysql
 from initialize_db import init_db
+import os.path
 def main():
     init_db()
     root = Tk()
@@ -15,6 +16,9 @@ def main():
 
 class Signup_system:
       def __init__(self,root):
+          self.check_file=os.path.join(os.path.abspath(os.path.dirname(__file__)),"mysqlcredentials.txt")
+          f=open(self.check_file,"r")
+          self.output=[i.strip("\n") for i in f.readlines()]
           self.root=root
           self.root.title("Signup system")
           self.root.geometry("1350x700+0+0")
@@ -343,6 +347,9 @@ class Signup_system:
 
 
 
+
+
+
       def show_psd_hide_2(self):
           if (self.check_var_2.get()):
 
@@ -374,9 +381,9 @@ class Signup_system:
               messagebox.showerror("Error","password and confirm password should be same!",parent=self.root)
           else:
               try:
-                  con=pymysql.connect(host="localhost",user="root",password='',database="password_database" )
+                  con=pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database" )
                   cur=con.cursor()
-                  con_2=pymysql.connect(host="localhost",user="root",password='',database="password_database" )
+                  con_2=pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
                   cur_2=con_2.cursor()
                   cur.execute("select * from user where Username=%s",self.txt_username.get())
                   row=cur.fetchone()
@@ -407,6 +414,7 @@ class Signup_system:
 
               except Exception as es:
                   messagebox.showerror("Error", f"Error due to: {str(es)}",parent=self.root)
+
 
 
 if __name__ == '__main__':

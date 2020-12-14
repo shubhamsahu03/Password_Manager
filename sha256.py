@@ -25,8 +25,8 @@ def initialization_vector():
 def key_salt():
     salt = os.urandom(32)
     return salt
-def take_iv_id_salt(username):
-    db=pymysql.connect("localhost","root",'',"password_database")
+def take_iv_id_salt(username,list):
+    db=pymysql.connect(host=list[0],port=int(list[1]),user=list[2],password=list[3],database="password_database")
     cur=db.cursor()
     cur.execute("select iv,key_salt,id from user where Username=%s",(username))
     db.close()
@@ -42,17 +42,8 @@ def decrypt(ciphertext,key,iv):
     aes = pyaes.AESModeOfOperationCTR(key, pyaes.Counter(iv))
     decrypted = aes.decrypt(ciphertext)
     return decrypted.decode()
-def id_required(username):
-    db = pymysql.connect("localhost", "root", '', "password_database")
-    cur = db.cursor()
-    cur.execute("select id from user where Username=%s", (username))
-    data=cur.fetchone()
-    db.close()
-    return data[0]
 
-def bring_user_table(username):
 
-    return ("user_"+id_required(username))
 
 
 def random_ID_generator():

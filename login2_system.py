@@ -59,7 +59,7 @@ class Login_system:
         password = Label(Frame_Login, text="Password", font=("times new roman", 19, "bold"), bg="white",
                          fg="dark blue").place(
             x=20, y=195)
-        self.txt_password = Entry(Frame_Login, font=("times new roman", 17), bg="lightgray")
+        self.txt_password = Entry(Frame_Login, font=("times new roman", 17), bg="lightgray",show="*")
         self.txt_password.place(x=140, y=195, width=250)
         self.tab_order()
         #========Buttons================
@@ -71,7 +71,7 @@ class Login_system:
         exit_btn = Button(Frame_Login, text="Exit", fg="white", borderwidth=1, bg="green", font=("times new roman", 17),
                           command=self.iExit).place(x=290, y=350)
         btn_reg=Button(Frame_Login,text="Register New Account?",bg="white",fg="blue",font=("times new roman",12),borderwidth=0,command=self.register_window).place(x=20,y=236)
-        btn_toggle=Checkbutton(Frame_Login,justify=CENTER,text="Hide",bg="white",fg="blue",font=("times new roman",12),borderwidth=0,command=self.show_psd_hide,variable=self.check_var,onvalue=1,offvalue=0).place(x=400, y=195)
+        btn_toggle=Checkbutton(Frame_Login,justify=CENTER,text="Show",bg="white",fg="blue",font=("times new roman",12),borderwidth=0,command=self.show_psd_hide,variable=self.check_var,onvalue=1,offvalue=0).place(x=400, y=195)
     #====Delete Account=====
 
     def tab_order(self):
@@ -82,10 +82,10 @@ class Login_system:
     def show_psd_hide(self):
         if (self.check_var.get()):
 
-            self.txt_password.config(show="*")
+            self.txt_password.config(show="")
         else:
 
-            self.txt_password.config(show="")
+            self.txt_password.config(show="*")
 
     def iExit_2(self):
         MsgBox = messagebox.askquestion('Exit Application', 'Are you sure you want to Logout the application', icon='warning',parent=self.root2)

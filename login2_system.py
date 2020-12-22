@@ -34,7 +34,7 @@ class Login_system:
 
         bg_lbl = Label(self.root, image=self.new_bgpic).pack()
         title = Label(self.root, text="Signup System")
-        a = ImageTk.PhotoImage(file="pictures_1\Logo_Password_manager.png")
+        a = ImageTk.PhotoImage(file="pictures_1/Logo_Password_manager.png")
         self.root.iconphoto(False, a)
 
         #=======Login Frame======
@@ -211,7 +211,7 @@ class Login_system:
         #=======Title==========
         title=Label(self.root2,text="Password Manager",bd=10,relief=GROOVE,font=("times new roman",40,"bold"),bg="white",fg="black")
         title.pack(side=TOP,fill=X)
-        a = ImageTk.PhotoImage(file="pictures_1\Logo_Password_manager.png")
+        a = ImageTk.PhotoImage(file="pictures_1/Logo_Password_manager.png")
         self.root2.iconphoto(False, a)
 
         # =====All varibles=====
@@ -316,7 +316,7 @@ class Login_system:
             messagebox.showerror("Error","All entries are required to fulfill!" ,parent=self.root2)
         else:
 
-            db=pymysql.connect("localhost","root",'',"password_database")
+            db=pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
             cur=db.cursor()
             cur.execute("insert into user_{} (Title,Username,URL,Password,Email_ID,U_ID) values(%s,%s,%s,%s,%s,%s)".format(str(self.iv_and_salt[2])),(self.Title_var.get(),self.Username_var.get(),
                      self.URL_var.get(),
@@ -324,9 +324,10 @@ class Login_system:
                              self.security_key,int(self.iv_and_salt[0])),
                      self.EmailID_var.get(),random_ID_generator()))
             db.commit()
+            db.close()
             self.fetch_data()
             self.Clear()
-            db.close()
+
     #======fetch data====
     def fetch_data(self):
 

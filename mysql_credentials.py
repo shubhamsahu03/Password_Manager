@@ -31,7 +31,7 @@ class MYSQL_LOGIN:
         self.root=Tk()
         self.root.title("MySQL Credentials")
         self.root.geometry("300x300+500+100")
-        a = ImageTk.PhotoImage(file="pictures_1\mysql_hosting.png")
+        a = ImageTk.PhotoImage(file="pictures_1/mysql_hosting.png")
         self.root.iconphoto(False, a)
 
         credential_title=Label(self.root,text="MYSQL CREDENTIALS",fg="black",bg="cyan",relief=GROOVE,font=("times new roman",17,"bold")).pack(side=TOP,fill=X)

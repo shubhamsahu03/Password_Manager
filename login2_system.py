@@ -333,7 +333,7 @@ class Login_system:
 
         db = pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
         cur = db.cursor()
-        cur.execute("select * from user_{}".format(str(self.iv_and_salt[2])))
+        cur.execute("select * from user_{} order by Time_of_Entry desc".format(str(self.iv_and_salt[2])))
         rows=cur.fetchall()
         if len(rows)!=0:
             self.Password_Table.delete(*self.Password_Table.get_children())

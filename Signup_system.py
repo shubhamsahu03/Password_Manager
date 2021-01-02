@@ -403,7 +403,7 @@ class Signup_system:
 
                       con.commit()
                       cur_2.execute(
-                          "create table {} (Title varchar(50),Username varchar(60),URL varchar(50),Password varchar(60),Email_ID varchar(50),U_ID varchar(50) PRIMARY KEY)".format(
+                          "create table {} (Title varchar(50),Username varchar(60),URL varchar(50),Password varchar(60),Email_ID varchar(50),U_ID varchar(50) PRIMARY KEY,Time_of_Entry timestamp DEFAULT current_timestamp())".format(
                               "user_" + str(id_required(self.txt_username.get(),self.output))))
                       con.close()
                       con_2.commit()

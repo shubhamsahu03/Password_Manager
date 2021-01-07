@@ -1,4 +1,4 @@
-# password_database
+# Password_Manager
 It's a good password manager because i made it.
 
 Todo:
@@ -11,6 +11,10 @@ Todo:
 
 # Dependencies
 
-pymysql, pbkdf2, secrets, pillow, pyperclip
+- pymysql
+- pbkdf2 
+- secrets 
+- pillow 
+- pyperclip
 
 

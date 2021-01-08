@@ -9,7 +9,7 @@ Todo:
 5. Your Account table (Database used is MYSQL) has columns: Title,Username,URL,Password,Email-ID.
 6. Search Your Passwords by entering the corresponding Title or Username or URL.
 
-# Dependencies
+### Dependencies :
 
 - pymysql
 - pbkdf2 

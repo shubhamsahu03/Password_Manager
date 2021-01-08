@@ -1,14 +1,22 @@
 
 #This file is for taking mysql_credentials which will be used in other files...
 
-
-
-from tkinter import *
-import os.path
-import Signup_system
-import pymysql
-from tkinter import messagebox
-from PIL import ImageTk,Image
+try:
+    import pbkdf2,pymysql,secrets,pyaes,PIL,pyperclip
+    from tkinter import *
+    import os.path
+    import Signup_system
+    import pymysql
+    from tkinter import messagebox
+    from PIL import ImageTk, Image
+except :
+    import install_dependencies
+    from tkinter import *
+    import os.path
+    import Signup_system
+    import pymysql
+    from tkinter import messagebox
+    from PIL import ImageTk,Image
 def main():
 
     mysql_login=MYSQL_LOGIN()

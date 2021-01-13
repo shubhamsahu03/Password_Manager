@@ -339,7 +339,7 @@ class Login_system:
             self.Password_Table.delete(*self.Password_Table.get_children())
             for row in rows:
 
-                self.Password_Table.insert("",END,values=(row[0],row[1],row[2],decrypt(binascii.unhexlify(row[3]),self.security_key,int(self.iv_and_salt[0])),row[4],row[5]))
+                self.Password_Table.insert("",END,values=(row[0],row[1],row[2],int(len(row[3])//2)*"*",row[4],row[5]))
 
             db.commit()
         db.close()
@@ -361,14 +361,23 @@ class Login_system:
     def get_cursor(self,ev):
         cursor_row=self.Password_Table.focus()
         content=self.Password_Table.item(cursor_row)
-        row=content["values"]
+        self.Entry_Fill=content["values"]
 
-        self.Title_var.set(row[0])
-        self.Username_var.set(row[1])
-        self.URL_var.set(row[2])
-        self.Password_var.set(row[3])
-        self.EmailID_var.set(row[4])
-        self.U_ID_var.set(row[5])
+        self.Title_var.set(self.Entry_Fill[0])
+        self.Username_var.set(self.Entry_Fill[1])
+        self.URL_var.set(self.Entry_Fill[2])
+        a=self.decrypt_onSelect()
+        self.Password_var.set(a)
+        self.EmailID_var.set(self.Entry_Fill[4])
+        self.U_ID_var.set(self.Entry_Fill[5])
+    def decrypt_onSelect(self):
+        db=pymysql.connect(host=self.output[0],port=int(self.output[1]),user=self.output[2],password=self.output[3],database="password_database")
+        cur=db.cursor()
+        cur.execute("select Password from user_{} where U_ID=%s".format(self.iv_and_salt[2]),(self.Entry_Fill[5]))
+        row=cur.fetchone()
+        plaintext=decrypt(binascii.unhexlify(row[0]),self.security_key,int(self.iv_and_salt[0]))
+        return plaintext
+
     #=======update data from table=======
 
     def update_data(self):

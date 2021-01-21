@@ -252,8 +252,8 @@ class Login_system:
         Deletebtn=Button(Manager_Frame,text="Delete",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.delete_data).place(x=210,y=500,width=100)
         Clearbtn=Button(Manager_Frame,text="Clear",fg="white",borderwidth=1,bg="green",font=("times new roman",17,"bold"),relief=GROOVE,command=self.Clear).place(x=310,y=500,width=100)
         Generate_random_password=Button(Manager_Frame,text="Generate Password",fg="black",bg="dodger blue",borderwidth=1,font=("times new roman",15,"bold"),command=self.generate_random_password).place(x=140,y=390)
-        Exit_btn=Button(Manager_Frame,text="Logout?",fg="white",bg="red",borderwidth=1,font=("times new roman",17,"bold"),command=self.iExit_2).place(x=330,y=390)
-        Copy_btn = Button(Manager_Frame, text="Copy Password", fg="white", bg="tomato2", borderwidth=1,font=("times new roman", 17, "bold"), command=self.copy_password).place(x=140, y=345)
+        Exit_btn=Button(Manager_Frame,text="Logout?",fg="white",bg="red",borderwidth=1,font=("times new roman",15,"bold"),command=self.iExit_2).place(x=326,y=390)
+        Copy_btn = Button(Manager_Frame, text="Copy Password ", fg="white", bg="tomato2", borderwidth=1,font=("times new roman", 17, "bold"), command=self.copy_password).place(x=140, y=345)
 
         #=====content of detail frame=====
         lbl_search=lbl_password=Label(Detail_Frame, text="Search By:", bg="white", fg="black", font=("times new roman", 20, "bold")).place(x=10,y=10)

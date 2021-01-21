@@ -1,5 +1,11 @@
+![Logo_Password_manager](https://user-images.githubusercontent.com/71839040/104889364-1eb2d380-5994-11eb-9e82-36aeb99b1c85.png)
+
+
 # Password_Manager
-It's a good password manager because i made it.
+
+Password Manager in Python using pyaes and hashlib.
+
+## Description
 
 Todo:
 1. Create your Account by entering an Username and a master password.
@@ -9,7 +15,7 @@ Todo:
 5. Your Account table (Database used is MYSQL) has columns: Title,Username,URL,Password,Email-ID.
 6. Search Your Passwords by entering the corresponding Title or Username or URL.
 
-### Dependencies :
+## Dependencies 
 
 - pymysql
 - pbkdf2 

@@ -24,4 +24,19 @@ Todo:
 - pyperclip
 - pyaes
 
+## Installing Via [Github](https://github.com/shubhamsahu03/Password_Manager)
+1. Clone/download the [repo](https://github.com/shubhamsahu03/Password_Manager)
+```
+  git clone https://github.com/shubhamsahu03/Password_Manager.git
+```
+2. Open cmd/terminal and cd into the project
+
+3. Then to run it, execute the following in the terminal:
+```
+  main.py
+```  
+
+## Warning / Precaution
+
+- You should MYSQL installed in your system.
 

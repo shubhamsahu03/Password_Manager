@@ -37,5 +37,5 @@ Todo:
 
 ## Warning / Precaution
 
-- You should MYSQL installed in your system.
+- You should have MYSQL installed in your system.
 

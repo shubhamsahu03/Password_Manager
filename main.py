@@ -2,7 +2,7 @@
 #This file is for taking mysql_credentials which will be used in other files...
 
 try:
-    import pbkdf2,pymysql,secrets,pyaes,PIL,pyperclip
+    import pbkdf2,pymysql,pyaes,PIL,pyperclip
     from tkinter import *
     import os.path
     import Signup_system

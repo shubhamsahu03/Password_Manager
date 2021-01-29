@@ -19,7 +19,6 @@ Todo:
 
 - pymysql
 - pbkdf2 
-- secrets 
 - pillow 
 - pyperclip
 - pyaes

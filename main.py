@@ -1,4 +1,3 @@
-
 #This file is for taking mysql_credentials which will be used in other files...
 
 try:

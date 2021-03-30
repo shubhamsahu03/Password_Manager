@@ -34,6 +34,10 @@ Todo:
 ```
   main.py
 ```  
+## Executable File Download link available
+
+[Click Here](https://drive.google.com/drive/folders/1L5ngw_hWvw60upAglSxwi2QFHPWv4CDK?usp=sharing)
+
 
 ## Warning / Precaution
 
